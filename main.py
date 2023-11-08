@@ -59,20 +59,40 @@ for station in stations:
 
     # find all connections (using ROUTE relationship) and their costs from the current station
     connected_stations = graph.run(f"""
-    MATCH (s:Station {{name: '{station_name}'}})-[:ROUTE]->(dest:Station)-[r:BELONGS_TO]->(l:Line)
-    WHERE (s)-[:BELONGS_TO]->(l)
-    RETURN dest.name AS destination, l.cost AS cost
+        MATCH (s:Station {{name: '{station_name}'}})-[:ROUTE]->(dest:Station)-[r:BELONGS_TO]->(l:Line)
+        WHERE (s)-[:BELONGS_TO]->(l)
+        RETURN dest.name AS destination, l.cost AS cost
     """).data()
 
     for connection in connected_stations:
         dest_name = connection['destination']
         cost = connection['cost']
         graph_data[station_name][dest_name] = cost
-print(graph_data)
+print("graph_data: ", graph_data)
+
+
+def calculate_total_cost(path, graph_structure):
+    """
+    Calculate the total cost based on the path and the pricing rules.
+    Each segment of the journey has a fixed cost regardless of the number of stations.
+    """
+    total_cost = 0
+    if path:
+        # Start with the cost of the first segment
+        total_cost = graph_structure[path[0]].get(path[1], 0)
+        # Add the cost of subsequent segments if there's a transfer
+        for i in range(1, len(path) - 1):
+            print("the station: ", path[i])
+            next_segment_cost = graph_structure[path[i]].get(path[i + 1], 0)
+            # Only add the cost if it's a transfer to a different line (cost changes)
+            if next_segment_cost != total_cost:
+                total_cost += next_segment_cost
+    return total_cost
 
 # # get the start and end station
 # start_station = input("Please type the start station: ")
 # end_station = input("Please type the end station: ")
+
 
 # find the cheapest way
 cheapest_path = cheapest_way(graph_data, "A", "D")
@@ -87,4 +107,5 @@ test_stations = graph.run("MATCH (s:Station) RETURN s.name AS name LIMIT 10").da
 print("test stations:", test_stations)
 print("test lines:", lines)
 print("test graph: ", graph_data)
-print("test whole path: ", ["A"] + cheapest_path + ["D"])
+print("test whole path: ",  cheapest_path)
+print("test total cost: ", calculate_total_cost(cheapest_path, graph_data))
