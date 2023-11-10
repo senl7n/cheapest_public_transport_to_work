@@ -57,17 +57,22 @@ for station in stations:
     station_name = station['name']
     graph_data[station_name] = {}
 
-    # find all connections (using ROUTE relationship) and their costs from the current station
     connected_stations = graph.run(f"""
         MATCH (s:Station {{name: '{station_name}'}})-[r:ROUTE]->(dest:Station)
         MATCH (l:Line {{name: r.line}})
-        RETURN dest.name AS destination, l.cost AS cost
+        RETURN dest.name AS destination, l.name AS line, l.cost AS cost
     """).data()
 
     for connection in connected_stations:
         dest_name = connection['destination']
+        line_name = connection['line']
         cost = connection['cost']
-        graph_data[station_name][dest_name] = cost
+
+        if dest_name not in graph_data[station_name]:
+            graph_data[station_name][dest_name] = {}
+
+        graph_data[station_name][dest_name][line_name] = cost
+
 print("graph_data: ", graph_data)
 
 
