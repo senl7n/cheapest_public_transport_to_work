@@ -59,8 +59,8 @@ for station in stations:
 
     # find all connections (using ROUTE relationship) and their costs from the current station
     connected_stations = graph.run(f"""
-        MATCH (s:Station {{name: '{station_name}'}})-[:ROUTE]->(dest:Station)-[r:BELONGS_TO]->(l:Line)
-        WHERE (s)-[:BELONGS_TO]->(l)
+        MATCH (s:Station {{name: '{station_name}'}})-[r:ROUTE]->(dest:Station)
+        MATCH (l:Line {{name: r.line}})
         RETURN dest.name AS destination, l.cost AS cost
     """).data()
 
