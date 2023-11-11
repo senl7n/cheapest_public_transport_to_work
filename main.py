@@ -74,13 +74,12 @@ for station in stations:
 
 print("graph_data: ", graph_data)
 
-# # get the start and end station
-# start_station = input("Please type the start station: ")
-# end_station = input("Please type the end station: ")
-
+# get the start and end station
+start_station = input("Please type the start station: ")
+end_station = input("Please type the end station: ")
 
 # find the cheapest way
-cheapest_path, path_info = cheapest_way(graph_data, "A", "D")
+cheapest_path, path_info = cheapest_way(graph_data, start_station, end_station)
 
 
 # calculate the total cost and transfer points
@@ -113,12 +112,3 @@ total_cost, transfer_points = calculate_total_cost_and_transfers(cheapest_path, 
 print(f"cheapest route: {cheapest_path}")
 print(f"transfer points: {transfer_points}")
 print(f"price: {total_cost}")
-
-
-# # debugging area
-# test_stations = graph.run("MATCH (s:Station) RETURN s.name AS name LIMIT 10").data()
-# print("test stations:", test_stations)
-# print("test lines:", lines)
-# print("test graph: ", graph_data)
-# print("test whole path: ",  cheapest_path)
-# print("test total cost: ", calculate_total_cost(cheapest_path, graph_data))
