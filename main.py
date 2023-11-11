@@ -95,8 +95,11 @@ def calculate_total_cost_and_transfers(cheapest_path, path_info, graph_data):
         line_used = path_info[start_station]
 
         if line_used != current_line:
-            if current_line is not None:  # 判断是否为第一次乘车
-                transfer_points.append(start_station)
+            if current_line is not None:  # if not the first line
+                for j in range(i, len(cheapest_path)):
+                    if path_info[cheapest_path[j]] != current_line:
+                        transfer_points.append(cheapest_path[j - 1])
+                        break
             current_line = line_used
             cost = graph_data[start_station][end_station][line_used]
             total_cost += cost
