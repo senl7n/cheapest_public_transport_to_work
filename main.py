@@ -1,4 +1,4 @@
-from py2neo import Graph, Node, Relationship
+from py2neo import Graph
 
 graph = Graph("bolt://localhost:7687", auth=("neo4j", "123456789"))
 
@@ -108,7 +108,28 @@ def calculate_total_cost_and_transfers(cheapest_path, path_info, graph_data):
 
 total_cost, transfer_points = calculate_total_cost_and_transfers(cheapest_path, path_info, graph_data)
 
+# if there is no transfer point, append "None"
+if len(transfer_points) == 0:
+    transfer_points.append("None")
+
+# get the lines in order
+lines_in_order = [line for station, line in path_info.items() if line is not None]
+
+unique_lines_in_order = []
+seen_lines = set()
+for line in lines_in_order:
+    if line not in seen_lines:
+        unique_lines_in_order.append(line)
+        seen_lines.add(line)
+
+# reverse the list
+reversed_unique_lines = unique_lines_in_order[::-1]
+ordered_unique_lines = " -> ".join(reversed_unique_lines)
+
+ordered_cheapest_path = " -> ".join(cheapest_path)
+
 # print the result
-print(f"cheapest route: {cheapest_path}")
-print(f"transfer points: {transfer_points}")
-print(f"price: {total_cost}")
+print(f"Cheapest Route: {ordered_cheapest_path}")
+print(f"Start Station: {start_station}; Transfer Station: {' | '.join(transfer_points)}; End Station: {end_station}")
+print(f"Line Used: {ordered_unique_lines}")
+print(f"Price: {total_cost}")
