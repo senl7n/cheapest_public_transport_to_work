@@ -23,7 +23,7 @@
         <nav>
             <ul>
                 <li><a href="#intro">Welcome</a></li>
-                <li><a href="#one">[Subpage 1]</a></li>
+                <li><a href="#one">Find the Cheapest Route</a></li>
 <!--                <li><a href="#two">[Subpage 2]</a></li>-->
 <!--                <li><a href="#three">[Subpage 3]</a></li>-->
             </ul>
@@ -46,7 +46,7 @@
     </section>
 
     <!-- One -->
-        <section id="one" class="wrapper style1 fade-up">
+    <section id="one" class="wrapper style1 fade-up">
         <div class="inner">
             <h2>Find the Cheapest Route</h2>
             <p>Only for the main part of Manchester.</p>
@@ -58,12 +58,12 @@
                         <div class="fields">
                             <div class="field">
                                 <label for="start"></label>
-                                <input type="text" name="start" id="start" placeholder="Start Station"/>
+                                <input type="text" name="start" id="start" placeholder="Start Station" style="height: 100px"/>
                             </div>
                             <br>
                             <div class="field">
                                 <label for="end"></label>
-                                <input type="text" name="end" id="end" placeholder="End Station"/>
+                                <input type="text" name="end" id="end" placeholder="End Station" style="height: 100px"/>
                             </div>
 
                         </div>
@@ -80,24 +80,40 @@
                             <table>
                                 <tbody>
                                     <tr>
-                                        <td>N/A</td>
+                                        <td>Route</td>
+                                        <td id="cheapest-route">[Cheapest Route]</td>
                                     </tr>
                                     <tr>
-                                        <td>N/A</td>
+                                        <td>Stations</td>
+                                        <td>
+                                            <table>
+                                                <tr>
+                                                    <td>Start: <span id="start-station">[Start Station]</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Transfer: <span id="transfer-station">[Transfer Stations]</span></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>End: <span id="end-station">[End Station]</span></td>
+                                                </tr>
+                                            </table>
+                                        </td>
                                     </tr>
                                     <tr>
-                                        <td>N/A</td>
+                                        <td>Line Used</td>
+                                        <td id="line-used">[Line Used]</td>
                                     </tr>
                                     <tr>
-                                        <td>N/A</td>
+                                        <td>Price</td>
+                                        <td id="price">[Price]</td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
+
                     </div>
                 </section>
             </div>
-
         </div>
     </section>
 
