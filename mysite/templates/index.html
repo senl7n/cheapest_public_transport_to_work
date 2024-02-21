@@ -23,7 +23,7 @@
         <nav>
             <ul>
                 <li><a href="#intro">Welcome</a></li>
-                <li><a href="#one">Find the Cheapest Route</a></li>
+                <li><a href="#one">Find the Best Route</a></li>
 <!--                <li><a href="#two">[Subpage 2]</a></li>-->
 <!--                <li><a href="#three">[Subpage 3]</a></li>-->
             </ul>
@@ -37,7 +37,7 @@
     <!-- Intro -->
     <section id="intro" class="wrapper style1 fullscreen fade-up">
         <div class="inner">
-            <h1>Find Cheapest Bus Route in Manchester</h1>
+            <h1>Find Best Bus Route in Manchester</h1>
             <p> </p>
             <ul class="actions">
                 <li><a href="#one" class="button scrolly">Learn more</a></li>
@@ -48,10 +48,17 @@
     <!-- One -->
     <section id="one" class="wrapper style1 fade-up">
         <div class="inner">
-            <h2>Find the Cheapest Route</h2>
+            <h2>Find the Best Route</h2>
             <p>Only for the main part of Manchester.</p>
+            <div class="segmented-control" style="margin-top: -20px">
+                <input type="radio" name="segmented-control" id="option1" checked>
+                <label for="option1">Cheapest</label>
+                <input type="radio" name="segmented-control" id="option2">
+                <label for="option2">Quickest</label>
+            </div>
             <div class="split style2">
                 <section>
+                    <br>
                     <h3>Choose the station</h3>
                     <p> </p>
                     <form method="post" action="#">
@@ -74,6 +81,7 @@
                 </section>
                 <section>
                     <div class="inner">
+                        <br>
                         <h3>Result</h3>
                         <p> </p>
                         <div class="table-wrapper">
