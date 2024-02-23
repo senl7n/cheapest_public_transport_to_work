@@ -1,3 +1,5 @@
+import random
+
 from py2neo import Graph
 
 graph = Graph("bolt://localhost:7687", auth=("neo4j", "123456789"))
@@ -37,12 +39,56 @@ def cheapest_way(graph_structure, start, end):
 
     # get the complete path
     path = []
-    path_info = {}  # This will store the path and the line used for each segment
+    path_info = {}
     while current_node is not None:
         path.append(current_node)
         next_node = cheapest_paths[current_node][0]
         line_used = cheapest_paths[current_node][2]  # get the line used
         path_info[current_node] = line_used
+        current_node = next_node
+    path = path[::-1]
+
+    return path, path_info
+
+
+def quickest_way(graph_structure, start, end):
+    quickest_paths = {start: (None, 0, None)}  # {node: (predecessor, time, line)}
+    current_node = start
+    visited = set()
+
+    while current_node != end:
+        visited.add(current_node)
+        destinations = set(graph_structure[current_node]) - visited
+        time_to_current_node, current_line = quickest_paths[current_node][1], quickest_paths[current_node][2]
+
+        for next_node in destinations:
+            for line, _ in graph_structure[current_node][next_node].items():
+                # Add time only if switching lines
+                time_for_line = random.randint(3, 6)
+                new_time = time_to_current_node + time_for_line
+
+                # Add additional time if there is a line change
+                if current_line and line != current_line:
+                    new_time += random.randint(5, 10)  # additional time for line change
+
+                if next_node not in quickest_paths or quickest_paths[next_node][1] > new_time:
+                    quickest_paths[next_node] = (current_node, new_time, line)
+
+        next_destinations = {node: quickest_paths[node] for node in quickest_paths if node not in visited}
+        if not next_destinations:
+            return None
+
+        # next node is the destination with the lowest time
+        current_node = min(next_destinations, key=lambda k: next_destinations[k][1])
+
+    # get the complete path
+    path = []
+    path_info = {}
+    while current_node is not None:
+        path.append(current_node)
+        next_node = quickest_paths[current_node][0]
+        time_used = quickest_paths[current_node][1]  # get the time used
+        path_info[current_node] = time_used
         current_node = next_node
     path = path[::-1]
 
@@ -133,3 +179,62 @@ print(f"Cheapest Route: {ordered_cheapest_path}")
 print(f"Start Station: {start_station}; Transfer Station: {' | '.join(transfer_points)}; End Station: {end_station}")
 print(f"Line Used: {ordered_unique_lines}")
 print(f"Price: {total_cost}")
+
+# find the quickest way
+quickest_path, path_info = quickest_way(graph_data, start_station, end_station)
+
+
+# calculate the total time and transfer points
+def calculate_total_time_and_transfers(quickest_path, path_info):
+    total_time = 0
+    current_line = None
+    transfer_points = []
+
+    for i in range(len(quickest_path) - 1):
+        start_station = quickest_path[i]
+        end_station = quickest_path[i + 1]
+        line_used = path_info[start_station]
+
+        if line_used != current_line:
+            if current_line is not None:  # if not the first line
+                for j in range(i, len(quickest_path)):
+                    if path_info[quickest_path[j]] != current_line:
+                        transfer_points.append(quickest_path[j - 1])
+                        break
+            current_line = line_used
+            time_for_line = random.randint(3, 6)
+            total_time += time_for_line
+
+            if current_line is not None:  # if not the first line
+                total_time += random.randint(5, 10)  # additional time for line change
+
+    return total_time, transfer_points
+
+
+total_time, transfer_points = calculate_total_time_and_transfers(quickest_path, path_info)
+
+# if there is no transfer point, append "None"
+if len(transfer_points) == 0:
+    transfer_points.append("None")
+
+# get the lines in order
+lines_in_order = [line for station, line in path_info.items() if line is not None]
+
+unique_lines_in_order = []
+seen_lines = set()
+for line in lines_in_order:
+    if line not in seen_lines:
+        unique_lines_in_order.append(line)
+        seen_lines.add(line)
+
+# reverse the list
+reversed_unique_lines = unique_lines_in_order[::-1]
+ordered_unique_lines = " -> ".join(str(line) for line in reversed_unique_lines)
+
+ordered_quickest_path = " -> ".join(quickest_path)
+
+# print the result
+print(f"Quickest Route: {ordered_quickest_path}")
+print(f"Start Station: {start_station}; Transfer Station: {' | '.join(transfer_points)}; End Station: {end_station}")
+print(f"Line Used: {ordered_unique_lines}")
+print(f"Total Time: {total_time}")
