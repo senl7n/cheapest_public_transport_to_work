@@ -61,22 +61,20 @@
                     <br>
                     <h3>Choose the station</h3>
                     <p> </p>
-                    <form method="post" action="#">
+                    <form method="post" action="{% url 'process_route' %}">
+                        {% csrf_token %}
                         <div class="fields">
                             <div class="field">
-                                <label for="start"></label>
-                                <input type="text" name="start" id="start" placeholder="Start Station" style="height: 100px"/>
+                                <p>Start Station: </p>
+                                <input type="text" name="start" id="start" placeholder="Please enter the station name" style="height: 100px; margin-top: -40px;"/>
                             </div>
                             <br>
                             <div class="field">
-                                <label for="end"></label>
-                                <input type="text" name="end" id="end" placeholder="End Station" style="height: 100px"/>
+                                <p>End Station: </p>
+                                <input type="text" name="end" id="end" placeholder="Please enter the station name" style="height: 100px; margin-top: -40px;"/>
                             </div>
-
                         </div>
-                        <ul class="actions">
-                            <li><a href="" class="button submit">Search</a></li>
-                        </ul>
+                        <input type="submit" value="Search">
                     </form>
                 </section>
                 <section>
