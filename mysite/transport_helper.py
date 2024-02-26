@@ -166,7 +166,6 @@ class Helper:
     def get_ordered_lines(self, path_info, path):
         # get the lines in order
         lines_in_order = [line for station, line in path_info.items() if line is not None]
-        print("lines_in_order: ", lines_in_order)
 
         unique_lines_in_order = []
         seen_lines = set()
@@ -224,7 +223,6 @@ if __name__ == "__main__":
 
     # reverse the list
     reversed_unique_lines = unique_lines_in_order[::-1]
-    print("reversed_unique_lines: ", reversed_unique_lines)
     ordered_unique_lines = " -> ".join(str(line) for line in reversed_unique_lines)
 
     ordered_quickest_path = " -> ".join(quickest_path)
