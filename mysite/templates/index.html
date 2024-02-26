@@ -14,6 +14,8 @@
     <noscript>
         <link rel="stylesheet" href="{% static 'assets/css/noscript.css' %}"/>
     </noscript>
+    <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.all.min.js"></script>
+    <link href="https://fastly.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.min.css" rel="stylesheet">
 </head>
 <body class="is-preload">
 
@@ -51,9 +53,9 @@
             <h2>Find the Best Route</h2>
             <p>Only for the main part of Manchester.</p>
             <div class="segmented-control" style="margin-top: -20px">
-                <input type="radio" name="segmented-control" id="option1" checked>
+                <input type="radio" name="option" id="option1" value="cheapest" checked>
                 <label for="option1">Cheapest</label>
-                <input type="radio" name="segmented-control" id="option2">
+                <input type="radio" name="option" id="option2" value="quickest">
                 <label for="option2">Quickest</label>
             </div>
             <div class="split style2">
@@ -61,7 +63,7 @@
                     <br>
                     <h3>Choose the station</h3>
                     <p> </p>
-                    <form method="post" action="{% url 'process_route' %}">
+<!--                    <form method="post" action="{% url 'process_route' %}">-->
                         {% csrf_token %}
                         <div class="fields">
                             <div class="field">
@@ -73,9 +75,11 @@
                                 <p>End Station: </p>
                                 <input type="text" name="end" id="end" placeholder="Please enter the station name" style="height: 100px; margin-top: -40px;"/>
                             </div>
+                            <br>
+                            <button type="submit" class="submit-button">Search</button>
                         </div>
-                        <input type="submit" value="Search">
-                    </form>
+
+<!--                    </form>-->
                 </section>
                 <section>
                     <div class="inner">
@@ -87,7 +91,7 @@
                                 <tbody>
                                     <tr>
                                         <td>Route</td>
-                                        <td id="cheapest-route">[Cheapest Route]</td>
+                                        <td id="route">[Cheapest Route]</td>
                                     </tr>
                                     <tr>
                                         <td>Stations</td>
@@ -109,9 +113,16 @@
                                         <td>Line Used</td>
                                         <td id="line-used">[Line Used]</td>
                                     </tr>
-                                    <tr>
-                                        <td>Price</td>
-                                        <td id="price">[Price]</td>
+                                    <tr id="cost-row">
+                                        <td>Cost</td>
+                                        <td id="cost">[Cost]</td>
+                                    </tr>
+                                    <tr id="blank-row">
+                                        <td>Blank</td>
+                                        <td id="blank">[Blank]</td>
+                                    <tr id="time-row">
+                                        <td>Time</td>
+                                        <td id="time">[Time]</td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -226,6 +237,63 @@
 <script src="{% static 'assets/js/breakpoints.min.js' %}"></script>
 <script src="{% static 'assets/js/util.js' %}"></script>
 <script src="{% static 'assets/js/main.js' %}"></script>
-
+<script>
+    $('.submit-button').on('click', function (event) {
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+        var selectedOption = $('input[name="option"]:checked').val();
+        var data = {
+            start: $('input[name="start"]').val(),
+            end: $('input[name="end"]').val(),
+            option: selectedOption,
+        };
+        $.ajax({
+            url: '/transportation/process_route/',
+            method: 'POST',
+            headers: {"X-CSRFToken": csrftoken},
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            success: function (result) {
+                if (result.ret === 1) {
+                    $("#start-station").text(result.start);
+                    $("#transfer-station").text(result.transfer_points);
+                    $("#end-station").text(result.end);
+                    $("#cost").text(result.total_cost);
+                    $("#time").text(result.total_time);
+                    $("#route").text(result.route);
+                    $("#line-used").text(result.line_used);
+                } else {
+                    Swal.fire({
+                        icon: 'error',
+                        title: 'Error',
+                        text: result.msg
+                    });
+                }
+            },
+            error: function () {
+                Swal.fire({
+                    icon: 'error',
+                    title: '{$Think.lang.status.error}',
+                    text: '{$Think.lang.systemError}'
+                });
+            }
+        });
+    });
+    $('input[type=radio][name=option]').change(function() {
+        if (this.value === 'cheapest') {
+            $("#cost-row").show();
+            $("#time-row").hide();
+            $("#blank-row").hide();
+        }
+        else if (this.value === 'quickest') {
+            $("#time-row").show();
+            $("#cost-row").hide();
+            $("#blank-row").hide();
+        }
+    });
+    $(document).ready(function() {
+        $("#time-row").hide();
+        $("#blank-row").hide();
+    });
+</script>
 </body>
 </html>
