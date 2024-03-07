@@ -255,7 +255,8 @@
             success: function (result) {
                 if (result.ret === 1) {
                     $("#start-station").text(result.start);
-                    $("#transfer-station").text(result.transfer_points);
+                    var transferPointsText = result.transfer_points.length > 0 ? result.transfer_points : "N/A";
+                    $("#transfer-station").text(transferPointsText);
                     $("#end-station").text(result.end);
                     $("#cost").text(result.total_cost);
                     $("#time").text(result.total_time);

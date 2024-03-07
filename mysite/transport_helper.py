@@ -5,31 +5,57 @@ from py2neo import Graph
 
 class Helper:
     def __init__(self, db_host="bolt://localhost:7687", db_user="neo4j", db_password="123456789"):
+        # self.graph = Graph(db_host, auth=(db_user, db_password))
+        # self.stations = self.graph.run("MATCH (s:Station) RETURN s.name AS name").data()
+        # self.lines = self.graph.run("MATCH (l:Line) RETURN l.name AS name, l.cost AS cost").data()
+        # self.graph_data = {}
+        #
+        # # define the graph based on the data in the database
+        # for station in self.stations:
+        #     station_name = station['name']
+        #     self.graph_data[station_name] = {}
+        #
+        #     connected_stations = self.graph.run(f"""
+        #         MATCH (s:Station {{name: '{station_name}'}})-[r:ROUTE]->(dest:Station)
+        #         MATCH (l:Line {{name: r.line}})
+        #         RETURN dest.name AS destination, l.name AS line, l.cost AS cost
+        #     """).data()
+        #
+        #     for connection in connected_stations:
+        #         dest_name = connection['destination']
+        #         line_name = connection['line']
+        #         cost = connection['cost']
+        #
+        #         if dest_name not in self.graph_data[station_name]:
+        #             self.graph_data[station_name][dest_name] = {}
+        #
+        #         self.graph_data[station_name][dest_name][line_name] = cost
+
         self.graph = Graph(db_host, auth=(db_user, db_password))
-        self.stations = self.graph.run("MATCH (s:Station) RETURN s.name AS name").data()
-        self.lines = self.graph.run("MATCH (l:Line) RETURN l.name AS name, l.cost AS cost").data()
+        self.stopNames = self.graph.run("MATCH (s:stopName) RETURN s.name AS name").data()
+        self.routeNames = self.graph.run("MATCH (l:routeName) RETURN l.name AS name, l.price AS price").data()
         self.graph_data = {}
 
         # define the graph based on the data in the database
-        for station in self.stations:
-            station_name = station['name']
-            self.graph_data[station_name] = {}
+        for stop in self.stopNames:
+            stop_name = stop['name']
+            self.graph_data[stop_name] = {}
 
-            connected_stations = self.graph.run(f"""
-                MATCH (s:Station {{name: '{station_name}'}})-[r:ROUTE]->(dest:Station)
-                MATCH (l:Line {{name: r.line}})
-                RETURN dest.name AS destination, l.name AS line, l.cost AS cost
-            """).data()
+            connected_stations = self.graph.run("""
+                MATCH (s:stopName {name: $stop_name})-[r:ROUTE]->(dest:stopName)
+                MATCH (l:routeName {name: l.name})
+                RETURN dest.name AS destination, l.name AS route, l.price AS price
+            """, stop_name=stop_name).data()
 
             for connection in connected_stations:
                 dest_name = connection['destination']
-                line_name = connection['line']
-                cost = connection['cost']
+                route_name = connection['route']
+                price = connection['price']
 
-                if dest_name not in self.graph_data[station_name]:
-                    self.graph_data[station_name][dest_name] = {}
+                if dest_name not in self.graph_data[stop_name]:
+                    self.graph_data[stop_name][dest_name] = {}
 
-                self.graph_data[station_name][dest_name][line_name] = cost
+                self.graph_data[stop_name][dest_name][route_name] = price
 
     # use dijkstra algorithm to find the cheapest way with line switching cost
     def cheapest_way(self, start, end):
@@ -196,7 +222,6 @@ if __name__ == "__main__":
 
     total_cost, transfer_points = helper.calculate_total_cost_and_transfers(cheapest_path, path_info)
 
-    # if there is no transfer point, append "None"
     if len(transfer_points) == 0:
         transfer_points.append("None")
 
@@ -207,7 +232,6 @@ if __name__ == "__main__":
 
     total_time, transfer_points = helper.calculate_total_time_and_transfers(quickest_path, path_info)
 
-    # if there is no transfer point, append "None"
     if len(transfer_points) == 0:
         transfer_points.append("None")
 
