@@ -69,3 +69,13 @@ def process_route(request):
                 "ret": 0,
                 "msg": "Please enter both start and end stations and they should not be empty."
             })
+
+
+def route_list(request):
+    # 假设CSV文件位于项目的根目录下
+    csv_file_path = './choosed_bus_stops.csv'  # 更新为你的CSV文件路径
+    helper = Helper(csv_file_path)
+    routes_with_stops = helper.get_routes_with_stops()  # 这需要你在Helper类中实现
+
+    # 渲染页面并传递路线数据
+    return render(request, 'route_list.html', {'routes_with_stops': routes_with_stops})

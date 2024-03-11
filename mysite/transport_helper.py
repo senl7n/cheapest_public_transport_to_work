@@ -1,40 +1,16 @@
 import random
+import csv
 
 from py2neo import Graph
 
 
 class Helper:
     def __init__(self, db_host="bolt://localhost:7687", db_user="neo4j", db_password="123456789"):
-        # self.graph = Graph(db_host, auth=(db_user, db_password))
-        # self.stations = self.graph.run("MATCH (s:Station) RETURN s.name AS name").data()
-        # self.lines = self.graph.run("MATCH (l:Line) RETURN l.name AS name, l.cost AS cost").data()
-        # self.graph_data = {}
-        #
-        # # define the graph based on the data in the database
-        # for station in self.stations:
-        #     station_name = station['name']
-        #     self.graph_data[station_name] = {}
-        #
-        #     connected_stations = self.graph.run(f"""
-        #         MATCH (s:Station {{name: '{station_name}'}})-[r:ROUTE]->(dest:Station)
-        #         MATCH (l:Line {{name: r.line}})
-        #         RETURN dest.name AS destination, l.name AS line, l.cost AS cost
-        #     """).data()
-        #
-        #     for connection in connected_stations:
-        #         dest_name = connection['destination']
-        #         line_name = connection['line']
-        #         cost = connection['cost']
-        #
-        #         if dest_name not in self.graph_data[station_name]:
-        #             self.graph_data[station_name][dest_name] = {}
-        #
-        #         self.graph_data[station_name][dest_name][line_name] = cost
-
         self.graph = Graph(db_host, auth=(db_user, db_password))
         self.stopNames = self.graph.run("MATCH (s:stopName) RETURN s.name AS name").data()
         self.routeNames = self.graph.run("MATCH (l:routeName) RETURN l.name AS name, l.price AS price").data()
         self.graph_data = {}
+        self.load_data_from_csv('../choosed_bus_stops.csv')
 
         # define the graph based on the data in the database
         for stop in self.stopNames:
@@ -208,8 +184,18 @@ class Helper:
 
         return ordered_cheapest_path, ordered_unique_lines
 
+    def load_data_from_csv(self, csv_file_path):
+        with open(csv_file_path, mode='r', encoding='utf-8') as csvfile:
+            csv_reader = csv.DictReader(csvfile)
+            for row in csv_reader:
+                route_name = row['route_name']
+                stop_name = row['stop_name']
+                if route_name not in self.graph_data:
+                    self.graph_data[route_name] = []
+                self.graph_data[route_name].append(stop_name)
 
 if __name__ == "__main__":
+    csv_file_path = '../choosed_bus_stops.csv'
     helper = Helper()
     # get the start and end station
     start_station = input("Please type the start station: ")

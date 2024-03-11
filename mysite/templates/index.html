@@ -26,7 +26,7 @@
             <ul>
                 <li><a href="#intro">Welcome</a></li>
                 <li><a href="#one">Find the Best Route</a></li>
-<!--                <li><a href="#two">[Subpage 2]</a></li>-->
+                <li><a href="#two">Route List</a></li>
 <!--                <li><a href="#three">[Subpage 3]</a></li>-->
             </ul>
         </nav>
@@ -63,7 +63,6 @@
                     <br>
                     <h3>Choose the station</h3>
                     <p> </p>
-<!--                    <form method="post" action="{% url 'process_route' %}">-->
                         {% csrf_token %}
                         <div class="fields">
                             <div class="field">
@@ -134,46 +133,65 @@
         </div>
     </section>
 
+    <!-- Two -->
+    <section id="two" class="wrapper style3 fade-up">
+        <div class="inner">
+            <h2>Bus Route List</h2>
+            <p>Explore available bus routes in Manchester.</p>
+
+            <!-- 动态生成路线列表 -->
+            <div id="bus-route-list">
+                {% for route, stops in routes_with_stops.items %}
+                <div class="collapsible">
+                    <div class="route">
+                        <h3>{{ route }}</h3>
+                        <ul class="stops-list" style="display:none;">
+                            {% for stop in stops %}
+                            <li>{{ stop }}</li>
+                            {% endfor %}
+                        </ul>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
 <!--    &lt;!&ndash; Two &ndash;&gt;-->
 <!--    <section id="two" class="wrapper style3 fade-up">-->
 <!--        <div class="inner">-->
-<!--            <h2>[Title]</h2>-->
-<!--            <p>[Description]</p>-->
-<!--            <div class="features">-->
-<!--                <section>-->
-<!--                    <span class="icon solid major fa-code"></span>-->
-<!--                    <h3>[Subtitle 1]</h3>-->
-<!--                    <p>[Description 1]</p>-->
-<!--                </section>-->
-<!--                <section>-->
-<!--                    <span class="icon solid major fa-lock"></span>-->
-<!--                    <h3>[Subtitle 2]</h3>-->
-<!--                    <p>[Description 2]</p>-->
-<!--                </section>-->
-<!--                <section>-->
-<!--                    <span class="icon solid major fa-cog"></span>-->
-<!--                    <h3>[Subtitle 3]</h3>-->
-<!--                    <p>[Description 3]</p>-->
-<!--                </section>-->
-<!--                <section>-->
-<!--                    <span class="icon solid major fa-desktop"></span>-->
-<!--                    <h3>[Subtitle 4]</h3>-->
-<!--                    <p>[Description 4]</p>-->
-<!--                </section>-->
-<!--                <section>-->
-<!--                    <span class="icon solid major fa-link"></span>-->
-<!--                    <h3>[Subtitle 5]</h3>-->
-<!--                    <p>[Description 5]</p>-->
-<!--                </section>-->
-<!--                <section>-->
-<!--                    <span class="icon major fa-gem"></span>-->
-<!--                    <h3>[Subtitle 6]</h3>-->
-<!--                    <p>[Description 6]</p>-->
-<!--                </section>-->
+<!--            <h2>Bus Route List</h2>-->
+<!--            <p>Explore available bus routes in Manchester.</p>-->
+
+<!--            &lt;!&ndash; Placeholder for the list of bus routes &ndash;&gt;-->
+<!--            <div id="bus-route-list">-->
+<!--                &lt;!&ndash; Each route is a collapsible section &ndash;&gt;-->
+<!--                <div class="collapsible">-->
+<!--                    <div class="route">-->
+<!--                        <h3>Route 1</h3>-->
+<!--                        <ul class="stops-list">-->
+<!--                            &lt;!&ndash; Placeholder for route 1 stops &ndash;&gt;-->
+<!--                            <li>Stop 1</li>-->
+<!--                            <li>Stop 2</li>-->
+<!--                            &lt;!&ndash; Add more stops as needed &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                <div class="collapsible">-->
+<!--                    <div class="route">-->
+<!--                        <h3>Route 2</h3>-->
+<!--                        <ul class="stops-list">-->
+<!--                            &lt;!&ndash; Placeholder for route 2 stops &ndash;&gt;-->
+<!--                            <li>Stop A</li>-->
+<!--                            <li>Stop B</li>-->
+<!--                            &lt;!&ndash; Add more stops as needed &ndash;&gt;-->
+<!--                        </ul>-->
+<!--                    </div>-->
+<!--                </div>-->
+
+<!--                &lt;!&ndash; Add more collapsible sections for additional routes &ndash;&gt;-->
 <!--            </div>-->
-<!--            <ul class="actions">-->
-<!--                <li><a href="generic.html" class="button">Learn more</a></li>-->
-<!--            </ul>-->
 <!--        </div>-->
 <!--    </section>-->
 
@@ -296,5 +314,28 @@
         $("#blank-row").hide();
     });
 </script>
+<script>
+    // Toggle the visibility of stops for each route
+    $('.collapsible').on('click', '.route h3', function () {
+        $(this).siblings('.stops-list').toggle();
+    });
+</script>
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    var toggle = false; // 标记状态：false表示收起，true表示展开
+    document.getElementById('toggle-routes').addEventListener('click', function() {
+        toggle = !toggle; // 切换状态
+        var stopsLists = document.querySelectorAll('.stops-list'); // 选择所有路线的列表
+        stopsLists.forEach(function(list) {
+            if (toggle) {
+                list.style.display = 'block'; // 展开
+            } else {
+                list.style.display = 'none'; // 收起
+            }
+        });
+    });
+});
+</script>
+
 </body>
 </html>
