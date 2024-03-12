@@ -48,7 +48,7 @@ def process_route(request):
             except Exception as e:
                 return JsonResponse({
                     "ret": 0,
-                    "msg": f"Please enter valid start and end stations."
+                    "msg": f"Routes between the two stations cannot be found using the current data available on this site."
                 })
             else:
                 route, line_used = helper.get_ordered_lines(path_info, path)
