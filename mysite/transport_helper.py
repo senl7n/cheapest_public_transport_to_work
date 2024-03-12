@@ -1,5 +1,5 @@
+import json
 import random
-import csv
 
 from py2neo import Graph
 
@@ -10,7 +10,7 @@ class Helper:
         self.stopNames = self.graph.run("MATCH (s:stopName) RETURN s.name AS name").data()
         self.routeNames = self.graph.run("MATCH (l:routeName) RETURN l.name AS name, l.price AS price").data()
         self.graph_data = {}
-        self.load_data_from_csv('../choosed_bus_stops.csv')
+        self.stations = self.load_data_from_json()
 
         # define the graph based on the data in the database
         for stop in self.stopNames:
@@ -184,15 +184,10 @@ class Helper:
 
         return ordered_cheapest_path, ordered_unique_lines
 
-    def load_data_from_csv(self, csv_file_path):
-        with open(csv_file_path, mode='r', encoding='utf-8') as csvfile:
-            csv_reader = csv.DictReader(csvfile)
-            for row in csv_reader:
-                route_name = row['route_name']
-                stop_name = row['stop_name']
-                if route_name not in self.graph_data:
-                    self.graph_data[route_name] = []
-                self.graph_data[route_name].append(stop_name)
+    def load_data_from_json(self, source_file="station_data.json"):
+        with open(source_file, 'r', encoding='utf-8') as f:
+            stations = json.loads(f.read())
+            return stations
 
 if __name__ == "__main__":
     csv_file_path = '../choosed_bus_stops.csv'

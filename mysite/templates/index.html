@@ -77,8 +77,6 @@
                             <br>
                             <button type="submit" class="submit-button">Search</button>
                         </div>
-
-<!--                    </form>-->
                 </section>
                 <section>
                     <div class="inner">
@@ -136,18 +134,20 @@
     <!-- Two -->
     <section id="two" class="wrapper style3 fade-up">
         <div class="inner">
+            <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Bus Route List</h2>
+            <button id="toggle-routes">Toggle Routes</button>
+            </div>
             <p>Explore available bus routes in Manchester.</p>
-
             <!-- 动态生成路线列表 -->
             <div id="bus-route-list">
-                {% for route, stops in routes_with_stops.items %}
+                {% for line, stations in line_data.items %}
                 <div class="collapsible">
                     <div class="route">
-                        <h3>{{ route }}</h3>
+                        <h3>{{ line }}</h3>
                         <ul class="stops-list" style="display:none;">
-                            {% for stop in stops %}
-                            <li>{{ stop }}</li>
+                            {% for station in stations %}
+                            <li>{{ station }}</li>
                             {% endfor %}
                         </ul>
                     </div>
@@ -157,7 +157,7 @@
         </div>
     </section>
 
-<!--    &lt;!&ndash; Two &ndash;&gt;-->
+    <!-- Two -->
 <!--    <section id="two" class="wrapper style3 fade-up">-->
 <!--        <div class="inner">-->
 <!--            <h2>Bus Route List</h2>-->
@@ -321,18 +321,15 @@
     });
 </script>
 <script>
-document.addEventListener('DOMContentLoaded', function() {
-    var toggle = false; // 标记状态：false表示收起，true表示展开
-    document.getElementById('toggle-routes').addEventListener('click', function() {
-        toggle = !toggle; // 切换状态
-        var stopsLists = document.querySelectorAll('.stops-list'); // 选择所有路线的列表
-        stopsLists.forEach(function(list) {
-            if (toggle) {
-                list.style.display = 'block'; // 展开
-            } else {
-                list.style.display = 'none'; // 收起
-            }
-        });
+$(document).ready(function(){
+    var toggle = false;
+    $("#toggle-routes").click(function(){
+        toggle = !toggle;
+        if (toggle) {
+            $(".stops-list").slideDown();
+        } else {
+            $(".stops-list").slideUp();
+        }
     });
 });
 </script>

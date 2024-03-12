@@ -1,14 +1,17 @@
 import json
 import sys
+
 sys.path.insert(0, './transport_helper.py')
 from django.shortcuts import render
 from django.http import JsonResponse
 from transport_helper import Helper
 
+helper = Helper()
+
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html')
+    return render(request, 'index.html', context={"line_data":helper.stations})
 
 
 def about(request):
@@ -31,7 +34,6 @@ def process_route(request):
         # Check if the user provided both start and end stations and they are not empty.
         if start_station and end_station and start_station.strip() != "" and end_station.strip() != "":
             try:
-                helper = Helper()
                 if option == "cheapest":
                     path, path_info = helper.cheapest_way(start_station, end_station)
                     total_cost, transfer_points = helper.calculate_total_cost_and_transfers(path, path_info)
@@ -69,13 +71,3 @@ def process_route(request):
                 "ret": 0,
                 "msg": "Please enter both start and end stations and they should not be empty."
             })
-
-
-def route_list(request):
-    # 假设CSV文件位于项目的根目录下
-    csv_file_path = './choosed_bus_stops.csv'  # 更新为你的CSV文件路径
-    helper = Helper(csv_file_path)
-    routes_with_stops = helper.get_routes_with_stops()  # 这需要你在Helper类中实现
-
-    # 渲染页面并传递路线数据
-    return render(request, 'route_list.html', {'routes_with_stops': routes_with_stops})

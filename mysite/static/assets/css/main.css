@@ -3928,4 +3928,7 @@ input, select, textarea {
     /*background-color: #f8f9fa; !* 鼠标悬停时改变背景颜色 *!*/
     color: #000000; /* 鼠标悬停时改变文字颜色 */
 }
+.stops-list {
+    column-count: 2;
+}
 
