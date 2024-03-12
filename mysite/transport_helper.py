@@ -19,7 +19,7 @@ class Helper:
 
             connected_stations = self.graph.run("""
                 MATCH (s:stopName {name: $stop_name})-[r:ROUTE]->(dest:stopName)
-                MATCH (l:routeName {name: l.name})
+                MATCH (l:routeName {name: r.name})
                 RETURN dest.name AS destination, l.name AS route, l.price AS price
             """, stop_name=stop_name).data()
 
@@ -189,8 +189,13 @@ class Helper:
             stations = json.loads(f.read())
             return stations
 
+    def get_all_stops(self):
+        result = self.graph.run("MATCH (n:stopName) RETURN n.name")
+        stops = sorted([record["n.name"] for record in result])
+        return stops
+
+
 if __name__ == "__main__":
-    csv_file_path = '../choosed_bus_stops.csv'
     helper = Helper()
     # get the start and end station
     start_station = input("Please type the start station: ")
@@ -205,7 +210,6 @@ if __name__ == "__main__":
 
     if len(transfer_points) == 0:
         transfer_points.append("None")
-
     # find the quickest way
     quickest_path, path_info = helper.quickest_way(start_station, end_station)
 

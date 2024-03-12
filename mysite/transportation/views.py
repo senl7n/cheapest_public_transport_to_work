@@ -11,7 +11,7 @@ helper = Helper()
 
 # Create your views here.
 def index(request):
-    return render(request, 'index.html', context={"line_data":helper.stations})
+    return render(request, 'index.html', context={"line_data": helper.stations, "stops": helper.get_all_stops()})
 
 
 def about(request):

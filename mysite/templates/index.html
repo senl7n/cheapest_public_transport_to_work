@@ -16,6 +16,8 @@
     </noscript>
     <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.all.min.js"></script>
     <link href="https://fastly.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </head>
 <body class="is-preload">
 
@@ -67,12 +69,22 @@
                         <div class="fields">
                             <div class="field">
                                 <p>Start Station: </p>
-                                <input type="text" name="start" id="start" placeholder="Please enter the station name" style="height: 100px; margin-top: -40px;"/>
+                                <select name="start" id="start" class="select2">
+                                    <option disabled selected>Please select a station</option>
+                                    {% for stop in stops %}
+                                    <option value="{{ stop }}">{{ stop }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <br>
                             <div class="field">
                                 <p>End Station: </p>
-                                <input type="text" name="end" id="end" placeholder="Please enter the station name" style="height: 100px; margin-top: -40px;"/>
+                                <select name="end" id="end" class="select2">
+                                    <option disabled selected>Please select a station</option>
+                                    {% for stop in stops %}
+                                    <option value="{{ stop }}">{{ stop }}</option>
+                                    {% endfor %}
+                                </select>
                             </div>
                             <br>
                             <button type="submit" class="submit-button">Search</button>
@@ -124,7 +136,6 @@
                                 </tbody>
                             </table>
                         </div>
-
                     </div>
                 </section>
             </div>
@@ -260,8 +271,8 @@
         var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
         var selectedOption = $('input[name="option"]:checked').val();
         var data = {
-            start: $('input[name="start"]').val(),
-            end: $('input[name="end"]').val(),
+            start: $('select[name="start"]').val(),
+            end: $('select[name="end"]').val(),
             option: selectedOption,
         };
         $.ajax({
