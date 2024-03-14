@@ -14,14 +14,6 @@ def index(request):
     return render(request, 'index.html', context={"line_data": helper.stations, "stops": helper.get_all_stops()})
 
 
-def about(request):
-    return render(request, 'about.html')
-
-
-def contact(request):
-    return render(request, 'contact.html')
-
-
 def process_route(request):
     if request.method == 'POST':
         data = json.loads(request.body)
