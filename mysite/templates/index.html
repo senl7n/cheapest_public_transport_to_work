@@ -16,9 +16,8 @@
     </noscript>
     <script src="https://fastly.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.all.min.js"></script>
     <link href="https://fastly.jsdelivr.net/npm/sweetalert2@11.7.11/dist/sweetalert2.min.css" rel="stylesheet">
-    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet" />
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/css/select2.min.css" rel="stylesheet"/>
     <link rel="icon" type="image/x-icon" href="{% static 'favicon.ico' %}">
-    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 </head>
 <body class="is-preload">
 
@@ -30,7 +29,7 @@
                 <li><a href="#intro">Welcome</a></li>
                 <li><a href="#one">Find the Best Route</a></li>
                 <li><a href="#two">Route List</a></li>
-<!--                <li><a href="#three">[Subpage 3]</a></li>-->
+                <!--                <li><a href="#three">[Subpage 3]</a></li>-->
             </ul>
         </nav>
     </div>
@@ -43,7 +42,7 @@
     <section id="intro" class="wrapper style1 fullscreen fade-up">
         <div class="inner">
             <h1>Find Best Bus Route in Manchester</h1>
-            <p> </p>
+            <p></p>
             <ul class="actions">
                 <li><a href="#one" class="button scrolly">Learn more</a></li>
             </ul>
@@ -65,75 +64,78 @@
                 <section>
                     <br>
                     <h3>Choose the station</h3>
-                    <p> </p>
-                        {% csrf_token %}
-                        <div class="fields">
-                            <div class="field">
-                                <p>Start Station: </p>
-                                <select name="start" id="start" class="select2">
-                                    <option disabled selected>Please select a station</option>
-                                    {% for stop in stops %}
-                                    <option value="{{ stop }}">{{ stop }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <br>
-                            <div class="field">
-                                <p>End Station: </p>
-                                <select name="end" id="end" class="select2">
-                                    <option disabled selected>Please select a station</option>
-                                    {% for stop in stops %}
-                                    <option value="{{ stop }}">{{ stop }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <br>
-                            <button type="submit" class="submit-button">Search</button>
+                    <p></p>
+                    {% csrf_token %}
+                    <div class="fields">
+                        <div class="field">
+                            <p>Start Station: </p>
+                            <select name="start" id="start" class="select2">
+                                <option disabled selected>Please select a station</option>
+                                {% for stop in stops %}
+                                <option value="{{ stop }}">{{ stop }}</option>
+                                {% endfor %}
+                            </select>
                         </div>
+                        <br>
+                        <div class="field">
+                            <p>End Station: </p>
+                            <select name="end" id="end" class="select2">
+                                <option disabled selected>Please select a station</option>
+                                {% for stop in stops %}
+                                <option value="{{ stop }}">{{ stop }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <br>
+                        <button type="submit" class="submit-button">Search</button>
+                    </div>
                 </section>
                 <section>
                     <div class="inner">
                         <br>
                         <h3>Result</h3>
-                        <p> </p>
+                        <div id="cost-message"></div>
+                        <div id="time-message"></div>
+                        <p></p>
                         <div class="table-wrapper">
                             <table>
                                 <tbody>
-                                    <tr>
-                                        <td>Route</td>
-                                        <td id="route">[Cheapest Route]</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Stations</td>
-                                        <td>
-                                            <table>
-                                                <tr>
-                                                    <td>Start: <span id="start-station">[Start Station]</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Transfer: <span id="transfer-station">[Transfer Stations]</span></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>End: <span id="end-station">[End Station]</span></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Line Used</td>
-                                        <td id="line-used">[Line Used]</td>
-                                    </tr>
-                                    <tr id="cost-row">
-                                        <td>Cost</td>
-                                        <td id="cost">[Cost]</td>
-                                    </tr>
-                                    <tr id="blank-row">
-                                        <td>Blank</td>
-                                        <td id="blank">[Blank]</td>
-                                    <tr id="time-row">
-                                        <td>Time</td>
-                                        <td id="time">[Time]</td>
-                                    </tr>
+                                <tr>
+                                    <td>Route</td>
+                                    <td id="route">[Best Route]</td>
+                                </tr>
+                                <tr>
+                                    <td>Stations</td>
+                                    <td>
+                                        <table>
+                                            <tr>
+                                                <td>Start: <span id="start-station">[Start Station]</span></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Transfer: <span id="transfer-station">[Transfer Stations]</span>
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>End: <span id="end-station">[End Station]</span></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Line Used</td>
+                                    <td id="line-used">[Line Used]</td>
+                                </tr>
+                                <tr id="cost-row">
+                                    <td>Cost</td>
+                                    <td id="cost">[Cost]</td>
+                                </tr>
+                                <tr id="blank-row">
+                                    <td>Blank</td>
+                                    <td id="blank">[Blank]</td>
+                                <tr id="time-row">
+                                    <td>Time</td>
+                                    <td id="time">[Time]</td>
+                                </tr>
                                 </tbody>
                             </table>
                         </div>
@@ -147,8 +149,8 @@
     <section id="two" class="wrapper style3 fade-up">
         <div class="inner">
             <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Bus Route List</h2>
-            <button id="toggle-routes">Toggle Routes</button>
+                <h2>Bus Route List</h2>
+                <button id="toggle-routes">Toggle Routes</button>
             </div>
             <p>Explore available bus routes in Manchester.</p>
             <!-- 动态生成路线列表 -->
@@ -170,82 +172,82 @@
     </section>
 
     <!-- Two -->
-<!--    <section id="two" class="wrapper style3 fade-up">-->
-<!--        <div class="inner">-->
-<!--            <h2>Bus Route List</h2>-->
-<!--            <p>Explore available bus routes in Manchester.</p>-->
+    <!--    <section id="two" class="wrapper style3 fade-up">-->
+    <!--        <div class="inner">-->
+    <!--            <h2>Bus Route List</h2>-->
+    <!--            <p>Explore available bus routes in Manchester.</p>-->
 
-<!--            &lt;!&ndash; Placeholder for the list of bus routes &ndash;&gt;-->
-<!--            <div id="bus-route-list">-->
-<!--                &lt;!&ndash; Each route is a collapsible section &ndash;&gt;-->
-<!--                <div class="collapsible">-->
-<!--                    <div class="route">-->
-<!--                        <h3>Route 1</h3>-->
-<!--                        <ul class="stops-list">-->
-<!--                            &lt;!&ndash; Placeholder for route 1 stops &ndash;&gt;-->
-<!--                            <li>Stop 1</li>-->
-<!--                            <li>Stop 2</li>-->
-<!--                            &lt;!&ndash; Add more stops as needed &ndash;&gt;-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
+    <!--            &lt;!&ndash; Placeholder for the list of bus routes &ndash;&gt;-->
+    <!--            <div id="bus-route-list">-->
+    <!--                &lt;!&ndash; Each route is a collapsible section &ndash;&gt;-->
+    <!--                <div class="collapsible">-->
+    <!--                    <div class="route">-->
+    <!--                        <h3>Route 1</h3>-->
+    <!--                        <ul class="stops-list">-->
+    <!--                            &lt;!&ndash; Placeholder for route 1 stops &ndash;&gt;-->
+    <!--                            <li>Stop 1</li>-->
+    <!--                            <li>Stop 2</li>-->
+    <!--                            &lt;!&ndash; Add more stops as needed &ndash;&gt;-->
+    <!--                        </ul>-->
+    <!--                    </div>-->
+    <!--                </div>-->
 
-<!--                <div class="collapsible">-->
-<!--                    <div class="route">-->
-<!--                        <h3>Route 2</h3>-->
-<!--                        <ul class="stops-list">-->
-<!--                            &lt;!&ndash; Placeholder for route 2 stops &ndash;&gt;-->
-<!--                            <li>Stop A</li>-->
-<!--                            <li>Stop B</li>-->
-<!--                            &lt;!&ndash; Add more stops as needed &ndash;&gt;-->
-<!--                        </ul>-->
-<!--                    </div>-->
-<!--                </div>-->
+    <!--                <div class="collapsible">-->
+    <!--                    <div class="route">-->
+    <!--                        <h3>Route 2</h3>-->
+    <!--                        <ul class="stops-list">-->
+    <!--                            &lt;!&ndash; Placeholder for route 2 stops &ndash;&gt;-->
+    <!--                            <li>Stop A</li>-->
+    <!--                            <li>Stop B</li>-->
+    <!--                            &lt;!&ndash; Add more stops as needed &ndash;&gt;-->
+    <!--                        </ul>-->
+    <!--                    </div>-->
+    <!--                </div>-->
 
-<!--                &lt;!&ndash; Add more collapsible sections for additional routes &ndash;&gt;-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </section>-->
+    <!--                &lt;!&ndash; Add more collapsible sections for additional routes &ndash;&gt;-->
+    <!--            </div>-->
+    <!--        </div>-->
+    <!--    </section>-->
 
-<!--    &lt;!&ndash; Three &ndash;&gt;-->
-<!--    <section id="three" class="wrapper style2 spotlights">-->
-<!--        <section>-->
-<!--            <a href="#" class="image"><img src="{% static 'images/pic01.jpg' %}" alt="" data-position="center center"/></a>-->
-<!--            <div class="content">-->
-<!--                <div class="inner">-->
-<!--                    <h2>[Function 1]</h2>-->
-<!--                    <p>[Description 1]</p>-->
-<!--                    <ul class="actions">-->
-<!--                        <li><a href="generic.html" class="button">Learn more</a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
-<!--        <section>-->
-<!--            <a href="#" class="image"><img src="{% static 'images/pic02.jpg' %}" alt="" data-position="top center"/></a>-->
-<!--            <div class="content">-->
-<!--                <div class="inner">-->
-<!--                    <h2>[Function 2]</h2>-->
-<!--                    <p>[Description 2]</p>-->
-<!--                    <ul class="actions">-->
-<!--                        <li><a href="generic.html" class="button">Learn more</a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
-<!--        <section>-->
-<!--            <a href="#" class="image"><img src="{% static 'images/pic03.jpg' %}" alt="" data-position="25% 25%"/></a>-->
-<!--            <div class="content">-->
-<!--                <div class="inner">-->
-<!--                    <h2>[Function 3]</h2>-->
-<!--                    <p>[Description 3]</p>-->
-<!--                    <ul class="actions">-->
-<!--                        <li><a href="generic.html" class="button">Learn more</a></li>-->
-<!--                    </ul>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--        </section>-->
-<!--    </section>-->
+    <!--    &lt;!&ndash; Three &ndash;&gt;-->
+    <!--    <section id="three" class="wrapper style2 spotlights">-->
+    <!--        <section>-->
+    <!--            <a href="#" class="image"><img src="{% static 'images/pic01.jpg' %}" alt="" data-position="center center"/></a>-->
+    <!--            <div class="content">-->
+    <!--                <div class="inner">-->
+    <!--                    <h2>[Function 1]</h2>-->
+    <!--                    <p>[Description 1]</p>-->
+    <!--                    <ul class="actions">-->
+    <!--                        <li><a href="generic.html" class="button">Learn more</a></li>-->
+    <!--                    </ul>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </section>-->
+    <!--        <section>-->
+    <!--            <a href="#" class="image"><img src="{% static 'images/pic02.jpg' %}" alt="" data-position="top center"/></a>-->
+    <!--            <div class="content">-->
+    <!--                <div class="inner">-->
+    <!--                    <h2>[Function 2]</h2>-->
+    <!--                    <p>[Description 2]</p>-->
+    <!--                    <ul class="actions">-->
+    <!--                        <li><a href="generic.html" class="button">Learn more</a></li>-->
+    <!--                    </ul>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </section>-->
+    <!--        <section>-->
+    <!--            <a href="#" class="image"><img src="{% static 'images/pic03.jpg' %}" alt="" data-position="25% 25%"/></a>-->
+    <!--            <div class="content">-->
+    <!--                <div class="inner">-->
+    <!--                    <h2>[Function 3]</h2>-->
+    <!--                    <p>[Description 3]</p>-->
+    <!--                    <ul class="actions">-->
+    <!--                        <li><a href="generic.html" class="button">Learn more</a></li>-->
+    <!--                    </ul>-->
+    <!--                </div>-->
+    <!--            </div>-->
+    <!--        </section>-->
+    <!--    </section>-->
 
 </div>
 
@@ -261,6 +263,7 @@
 
 <!-- Scripts -->
 <script src="{% static 'assets/js/jquery.min.js' %}"></script>
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-beta.1/dist/js/select2.min.js"></script>
 <script src="{% static 'assets/js/jquery.scrollex.min.js' %}"></script>
 <script src="{% static 'assets/js/jquery.scrolly.min.js' %}"></script>
 <script src="{% static 'assets/js/browser.min.js' %}"></script>
@@ -284,6 +287,20 @@
             contentType: 'application/json',
             success: function (result) {
                 if (result.ret === 1) {
+                    if (result.option === "cheapest" && result.total_cost > 5) {
+                        $("#cost-message").text("The total cost is high. It is recommended to buy a 1-day Bee AnyBus travelcard (￡5 ).");
+                    } else if (result.cost_message) {
+                        $("#cost-message").text(result.cost_message);
+                    } else {
+                        $("#cost-message").text("");  // clear the text if no message
+                    }
+                    if (result.option === "quickest" && result.total_time > 45) {
+                        $("#time-message").text("The total time is long. It is recommended to take a taxi or Uber.");
+                    } else if (result.time_message) {
+                        $("#time-message").text(result.time_message);
+                    } else {
+                        $("#time-message").text("");  // clear the text if no message
+                    }
                     $("#start-station").text(result.start);
                     var transferPointsText = result.transfer_points.length > 0 ? result.transfer_points : "N/A";
                     $("#transfer-station").text(transferPointsText);
@@ -309,19 +326,22 @@
             }
         });
     });
-    $('input[type=radio][name=option]').change(function() {
+    $('input[type=radio][name=option]').change(function () {
         if (this.value === 'cheapest') {
             $("#cost-row").show();
             $("#time-row").hide();
             $("#blank-row").hide();
-        }
-        else if (this.value === 'quickest') {
+            $("#cost-message").show();
+            $("#time-message").hide();
+        } else if (this.value === 'quickest') {
             $("#time-row").show();
             $("#cost-row").hide();
             $("#blank-row").hide();
+            $("#time-message").show();
+            $("#cost-message").hide();
         }
     });
-    $(document).ready(function() {
+    $(document).ready(function () {
         $("#time-row").hide();
         $("#blank-row").hide();
     });
@@ -333,17 +353,17 @@
     });
 </script>
 <script>
-$(document).ready(function(){
-    var toggle = false;
-    $("#toggle-routes").click(function(){
-        toggle = !toggle;
-        if (toggle) {
-            $(".stops-list").slideDown();
-        } else {
-            $(".stops-list").slideUp();
-        }
+    $(document).ready(function () {
+        var toggle = false;
+        $("#toggle-routes").click(function () {
+            toggle = !toggle;
+            if (toggle) {
+                $(".stops-list").slideDown();
+            } else {
+                $(".stops-list").slideUp();
+            }
+        });
     });
-});
 </script>
 
 </body>

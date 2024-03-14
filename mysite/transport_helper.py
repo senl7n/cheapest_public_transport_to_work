@@ -210,6 +210,7 @@ if __name__ == "__main__":
 
     if len(transfer_points) == 0:
         transfer_points.append("None")
+
     # find the quickest way
     quickest_path, path_info = helper.quickest_way(start_station, end_station)
 
